@@ -15,3 +15,22 @@ def home():
     users = conn.execute('SELECT * FROM users').fetchall()
     conn.close()
     return render_template("home.html", users=users)
+
+@views.route('/aboutUs')
+def aboutUs():
+    return render_template("aboutUs.html")
+
+@views.route('/properties')
+def properties():
+    conn = get_db_connection()
+    properties = conn.execute('SELECT * FROM properties').fetchall()
+    conn.close()
+    return render_template("properties.html", properties=properties)
+
+@views.route('/agents')
+def agents():
+    return render_template("agents.html")
+
+@views.route('/contactUs')
+def contactUs():
+    return render_template("contactUs.html")
