@@ -3,4 +3,12 @@
 
 {% block content %}
 <h1>This is the home page</h1>
+    {% for user in users %}
+        <div class='user'>
+            <p>{{ user['name'] }}</p>
+            <p>{{ user['email'] }}</p>
+            <p>{{ user['contact'] }}</p>
+            <p>{{ user['password'] }}</p>
+        </div>
+    {% endfor %}
 {% endblock %}
