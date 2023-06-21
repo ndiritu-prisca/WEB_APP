@@ -1,21 +1,9 @@
-from flask import Blueprint, render_template, request, flash, Flask
+from flask import Blueprint, render_template, request, flash
 import sqlite3
+from .views import get_db_connection
+from werkzeug.security import generate_password_hash, check_password_hash
 
 auth = Blueprint('auth', __name__)
-app = Flask(__name__)
-
-def get_db_connection():
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-@app.route('/')
-def index():
-    conn = get_db_connection()
-    posts = conn.execute('SELECT * FROM users').fetchall()
-    conn.close()
-    return render_template('home.html', users=users)
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -49,9 +37,19 @@ def sign_up():
         elif len(password1) < 8:
             flash('Password must be at least 8 characters.', category='error')
         else:
+            password = generate_password_hash(password1, method='sha256')
             conn = get_db_connection()
+            conn.execute('CREATE TABLE IF NOT EXISTS users ('
+                'id INTEGER PRIMARY KEY AUTOINCREMENT,'
+                'name STRING(150) UNIQUE,'
+                'email STRING(150) UNIQUE,'
+                'contact INTEGER UNIQUE,'
+                'password STRING(150)'
+                ');'
+            )
+            conn.commit()
             conn.execute('INSERT INTO users (name, email, contact, password) VALUES (?, ?, ?, ?)',
-                         (agency_name, email, contact, password1))
+                         (agency_name, email, contact, password))
             conn.commit()
             conn.close()
             flash('Account created successfully!', category='success')

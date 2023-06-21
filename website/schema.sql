@@ -1,9 +1,4 @@
-DROP TABLE IF EXISTS users;
-
-CREATE TABLE users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name STRING(150) UNIQUE,
-    email STRING(150) UNIQUE,
-    contact INTEGER UNIQUE,
-    password STRING(150)
-);
+SELECT * FROM users;
+SELECT name 
+FROM sqlite_master 
+WHERE type = 'table';
